@@ -1,0 +1,5 @@
+name = Matek
+description = "Elementary math exercises as captcha."
+package = "Spam control"
+core = 6.x
+dependencies[] = captcha

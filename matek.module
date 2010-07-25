@@ -1,0 +1,65 @@
+<?php
+
+function matek_captcha ( $op, $captcha_type='' ) {
+    switch ($op) {
+        case 'list':
+            return array('Másodikos matek');
+        case 'generate':
+            switch (mt_rand(0,6)) {
+                case 0:
+                    $k = sprintf('A trolibuszon %d utas utazott. Az egyik megállónál %d utas leszállt, valamennyi felszállt. Így %d utas utazott tovább. Hány utas szállt fel?',
+                            $p1 = rand(5,15),
+                            $p2 = mt_rand(1, $p1),
+                            $p3 = mt_rand($p1-$p2+1, 20));
+                    $v = $p3 - $p1 + $p2;
+                    break;
+                case 1:
+                    $k = sprintf('Néhány gyerek tartózkodott a teremben. Bement hozzájuk még %d diák. Így összesen már %d tanuló volt az osztályteremben. Hányan voltak eredetileg a helyiségben?',
+                            $p1 = mt_rand(1, 6),
+                            $p2 = mt_rand($p1, 10));
+                    $v = $p2 - $p1;
+                    break;
+                case 2:
+                    $k = sprintf('Az iskola udvarán fát ültetnek a gyerekek, összesen %d darabot. %d fának már kiásták a helyét. Még hány ilyen gödröt kell kiásniuk, hogy minden fát el tudjanak ültetni?',
+                            $p1 = mt_rand(2, 15),
+                            $p2 = mt_rand(1, $p1));
+                    $v = $p1 - $p2;
+                    break; 
+                case 3:
+                    $k = sprintf('A napköziben %d elsős gyerek tanul. Közülük %d lány. Mennyivel vannak többen, mint a fiúk?',
+                            $p1 = mt_rand(5, 20),
+                            $p2 = mt_rand(($p1/2)+1,
+                                $p1-1));
+                    $v =  $p2 * 2 - $p1;
+                    break;
+                case 4:
+                    $k = sprintf('A második osztály %d tanulójából %d szemüveges fiú. %d lány jár az osztályba. Hány fiú nem szemüveges?',
+                            $p1 = mt_rand(5, 20),
+                            $p2 = mt_rand(1, $p1/2),
+                            $p3 = mt_rand(1, $p1-$p2-1));
+                    $v =   $p1 - $p2 - $p3;      
+                    break;
+                case 5:
+                    $k = sprintf('Vera húsvéti tojásokat festett, összesen %d darabot. %d kék, %d zöld, míg a többi sárga lett. Mennyit festett Vera sárgára?',
+                            $p1 = mt_rand(4, 15),
+                            $p2 = mt_rand(1,$p1/2),
+                            $p3 = mt_rand(1, $p1 - $p2 - 1));
+                    $v = $p1 - $p2 - $p3;
+                case 6:
+                    $k = sprintf('Dóra bélyegeket gyűjt. Eddig %d bélyege van, ennek a felénél egy fél bélyeggel többet a szüleitől kapott. Hány bélyeget kapott édesanyjától, ha ez kétszer annyi, mint amennyit édesapjától kapott?',
+                            ($v = mt_rand(1,5)) * 6 - 1);
+                    $v *= 2;
+            }
+            $captcha = array();
+            $captcha['solution'] = (string) $v;
+            $captcha['form']['captcha_response'] = array(
+                    '#type' => 'textfield',
+                    '#title' => $k,
+                    '#description' => 
+                    //'<a href="http://hu.wikipedia.org/wiki/Turing-teszt">Captcha</a>. 
+                    'A megoldás egy pozitív egész, arab számjegyekkel írt szám.',
+                    '#maxlength' => 10,
+                    );
+            return $captcha;
+    }
+}
